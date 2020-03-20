@@ -91,7 +91,7 @@ void loop() {
   client.println("Content-Type: text/html");
   client.println(""); //  do not forget this one
 
-  client.print("<!DOCTYPE html><html lang=\"en\"> <head> <meta charset=\"utf-8\"> <link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css\" integrity=\"sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO\" crossorigin=\"anonymous\"> <script src=\"https://code.jquery.com/jquery-3.3.1.slim.min.js\" integrity=\"sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo\" crossorigin=\"anonymous\"></script> <script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js\" integrity=\"sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49\" crossorigin=\"anonymous\"></script> <script src=\"https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js\" integrity=\"sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy\" crossorigin=\"anonymous\"></script> <script src=\"https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.0.4/jscolor.min.js\"></script> <script type=text/javascript> $(document).ready(function(e){$('.jscolor').change(function(e){var rgb=hexToRgb('#' + $('.jscolor').val()); if ($('.jscolor').val()){$('#transfer').attr(\"href\", '/colorUpdate/' + $('.jscolor').val());}});}); function hexToRgb(hex){var result=/^#?([a-fd]{2})([a-fd]{2})([a-fd]{2})$/i.exec(hex); return result ?{r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16)}: null;}</script> </head> <style>#heading{text-align: center;}#colorPicker{width: 100%; height: 100px; font-size: 20px; text-align: center;}#transfer{width: 100%; height: 50px; font-size: 25px;}.alert{text-align: center;}</style> <body> <div class=\"container\"> <form> <div class=\"form-group\"> <h1 class=\"display-4\" id='heading'>RGB COLOR STRIP</h1> <div class=\"alert alert-primary\" role=\"alert\"> Select RGB color below to transfer it onto strip </div><div class=\"form-group\"> <div class=\"input-group\"> <input class=\"jscolor\" id=\"colorPicker\" value=\"ab2567\"> </div></div><div class=\"input-group\"> <a href=\"\" id=\"transfer\" class=\"btn btn-primary\">Transfer</a> </div></div></form> </div></body></html>");
+  client.print("<!DOCTYPE html><html lang='en'> <head> <meta charset='utf-8'> <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css' integrity='sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO' crossorigin='anonymous'> <script src='https://code.jquery.com/jquery-3.3.1.slim.min.js' integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo' crossorigin='anonymous'></script> <script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js' integrity='sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49' crossorigin='anonymous'></script> <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js' integrity='sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy' crossorigin='anonymous'></script> <script src='https://cdn.jsdelivr.net/npm/farbstastic@1.3.0/farbtastic.min.js'></script> <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/farbstastic@1.3.0/farbtastic.css'> <script type=text/javascript> $(document).ready(function(e){$('#colorpicker').farbtastic(function(color){applyColor(color);});}); function applyColor(color){console.log(color); $('.jscolor').val(color); $('.jscolor').css('background-color', color); var rgb=hexToRgb(color); if (color){var color_clean=color.replace('#',''); $('#transfer').attr('href', '/colorUpdate/' + color_clean);}}function hexToRgb(hex){var result=/^#?([a-fd]{2})([a-fd]{2})([a-fd]{2})$/i.exec(hex); return result ?{r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16)}: null;}</script> </head> <style>#heading{text-align: center;}#colorPicker{width: 100%; height: 100px; font-size: 20px; text-align: center;}#transfer{width: 100%; height: 50px; font-size: 25px;}.alert{text-align: center;}.picker{margin-top: 10px; margin-left: auto; margin-right: auto;}.container{width: 100%;}</style> <body> <div class='container'> <form> <div class='form-group'> <h1 class='display-4' id='heading'>RGB COLOR STRIP</h1> <div class='alert alert-primary' role='alert'> Select RGB color below to transfer it onto strip </div><div class='form-group'> <div class='input-group'> <input class='jscolor' id='colorPicker' value=''> </div><div class='input-group'> <div id='colorpicker' class='picker'></div></div></div><div class='input-group'> <a href='' id='transfer' class='btn btn-primary'>Transfer</a> </div></div></form> </div></body></html>");
 
   delay(1);
   Serial.println("Client disconnected");
@@ -104,26 +104,16 @@ void loop() {
 
 void setNeoColor(String value) {
   Serial.print("Setting Neopixel...");
-  // converting Hex to Int
-  int number = (int) strtol( &value[1], NULL, 16);
 
   // splitting into three parts
-  int r = number >> 16;
-  int g = number >> 8 & 0xFF;
-  int b = number & 0xFF;
-
-  // DEBUG
-  Serial.print("RGB: ");
-  Serial.print(r, DEC);
-  Serial.print(" ");
-  Serial.print(g, DEC);
-  Serial.print(" ");
-  Serial.print(b, DEC);
-  Serial.println(" ");
+   long number = (long) strtol( &value[0], NULL, 16);
+    int r = number >> 16;
+    int g = number >> 8 & 0xFF;
+    int b = number & 0xFF;
 
   // setting whole strip to the given color
   for (int i = 0; i < NUM_LEDS; i++) {
-    strip.setPixelColor(i, strip.Color( g, r, b ) );
+    strip.setPixelColor(i, strip.Color(  g, r, b ) );
   }
   // init
   strip.show();
